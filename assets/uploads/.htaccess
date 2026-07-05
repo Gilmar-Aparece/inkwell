@@ -1,0 +1,6 @@
+# Signature images are meant to be publicly viewable on certificates,
+# but block execution of anything uploaded here as a safety measure.
+<FilesMatch "\.(php|phtml|php\d)$">
+  Require all denied
+</FilesMatch>
+Options -Indexes
