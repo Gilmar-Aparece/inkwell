@@ -1,0 +1,5 @@
+# Block all direct web access — this folder holds certificate records
+# and the admin password hash. Only PHP on the server should read it.
+Require all denied
+Order allow,deny
+Deny from all
