@@ -1,0 +1,43 @@
+{
+    "html": {
+        "lessons": {
+            "intro": {
+                "title": "Your First Element",
+                "summary": "Tags, elements, and the skeleton every page shares.",
+                "body": "<p>An HTML element is a start tag, some content, and an end tag. Browsers read the tags and decide how to lay everything out \u2014 nothing renders until you tell it what it is.</p><p>Every page needs the same three landmarks: <code>&lt;!DOCTYPE html&gt;</code> so the browser knows the rules, an <code>&lt;html&gt;</code> root, and a <code>&lt;body&gt;</code> for anything visible.</p><p>Change the heading and paragraph on the right, then press <strong>Run</strong> to see it update.</p>",
+                "html": "<!DOCTYPE html>\r\n<html>\r\n  <body>\r\n    <h1>Hello, Inkwell</h1>\r\n    <p>Edit this paragraph, then press Run.</p>\r\n  </body>\r\n</html>",
+                "css": "body {\r\n  font-family: sans-serif;\r\n  padding: 24px;\r\n}",
+                "js": ""
+            },
+            "wedfwe": {
+                "title": "wedfwe",
+                "summary": "wefw",
+                "body": "wefwe",
+                "html": "wef",
+                "css": "wefwe",
+                "js": "wefwe"
+            }
+        }
+    },
+    "ruby": {
+        "label": "Ruby",
+        "color": "#7a0e7a",
+        "tagline": "dfsd",
+        "runnable": true,
+        "lessons": []
+    },
+    "asdasd": {
+        "label": "sadasd",
+        "color": "#2d5c4c",
+        "tagline": "",
+        "runnable": false,
+        "lessons": {
+            "jjjjj": {
+                "title": "Jjjjj",
+                "summary": "Hh",
+                "body": "Hhh",
+                "code": "Hh"
+            }
+        }
+    }
+}
