@@ -1,0 +1,950 @@
+{
+    "fetched_at": 1784776522,
+    "languages": {
+        "Bash script": [
+            {
+                "name": "bash",
+                "version": "5.2.21(1)-release",
+                "label": "bash"
+            }
+        ],
+        "C": [
+            {
+                "name": "clang-17.0.1-c",
+                "version": "17.0.1",
+                "label": "clang"
+            },
+            {
+                "name": "clang-16.0.4-c",
+                "version": "16.0.4",
+                "label": "clang"
+            },
+            {
+                "name": "clang-15.0.7-c",
+                "version": "15.0.7",
+                "label": "clang"
+            },
+            {
+                "name": "clang-14.0.6-c",
+                "version": "14.0.6",
+                "label": "clang"
+            },
+            {
+                "name": "gcc-13.2.0-c",
+                "version": "13.2.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-12.3.0-c",
+                "version": "12.3.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-11.4.0-c",
+                "version": "11.4.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-10.5.0-c",
+                "version": "10.5.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-9.3.0-c",
+                "version": "9.3.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-8.4.0-c",
+                "version": "8.4.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-7.5.0-c",
+                "version": "7.5.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-6.5.0-c",
+                "version": "6.5.0",
+                "label": "gcc"
+            },
+            {
+                "name": "clang-head-c",
+                "version": "24.0.0git (https://github.com/llvm/llvm-project.git 617e4f54e503b54b08445a086d95a80aa72a58d0)",
+                "label": "clang HEAD"
+            },
+            {
+                "name": "gcc-head-c",
+                "version": "17.0.0 20260719 (experimental)",
+                "label": "gcc HEAD"
+            }
+        ],
+        "C#": [
+            {
+                "name": "dotnetcore-8.0.402",
+                "version": "8.0.402",
+                "label": ".NET Core"
+            },
+            {
+                "name": "mono-6.12.0.199",
+                "version": "6.12.0.199",
+                "label": "mcs"
+            },
+            {
+                "name": "dotnetcore-6.0.425",
+                "version": "6.0.425",
+                "label": ".NET Core"
+            },
+            {
+                "name": "mono-5.20.1.34",
+                "version": "5.20.1.34",
+                "label": "mcs"
+            }
+        ],
+        "C++": [
+            {
+                "name": "clang-17.0.1",
+                "version": "17.0.1",
+                "label": "clang"
+            },
+            {
+                "name": "clang-16.0.4",
+                "version": "16.0.4",
+                "label": "clang"
+            },
+            {
+                "name": "clang-15.0.7",
+                "version": "15.0.7",
+                "label": "clang"
+            },
+            {
+                "name": "clang-14.0.6",
+                "version": "14.0.6",
+                "label": "clang"
+            },
+            {
+                "name": "gcc-13.2.0",
+                "version": "13.2.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-12.3.0",
+                "version": "12.3.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-11.4.0",
+                "version": "11.4.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-10.5.0",
+                "version": "10.5.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-9.3.0",
+                "version": "9.3.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-8.4.0",
+                "version": "8.4.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-7.5.0",
+                "version": "7.5.0",
+                "label": "gcc"
+            },
+            {
+                "name": "gcc-6.5.0",
+                "version": "6.5.0",
+                "label": "gcc"
+            },
+            {
+                "name": "clang-head",
+                "version": "24.0.0git (https://github.com/llvm/llvm-project.git 617e4f54e503b54b08445a086d95a80aa72a58d0)",
+                "label": "clang HEAD"
+            },
+            {
+                "name": "gcc-head",
+                "version": "17.0.0 20260719 (experimental)",
+                "label": "gcc HEAD"
+            }
+        ],
+        "CPP": [
+            {
+                "name": "clang-head-pp",
+                "version": "24.0.0git (https://github.com/llvm/llvm-project.git 617e4f54e503b54b08445a086d95a80aa72a58d0)",
+                "label": "clang HEAD"
+            },
+            {
+                "name": "gcc-head-pp",
+                "version": "17.0.0 20260719 (experimental)",
+                "label": "gcc HEAD"
+            }
+        ],
+        "Crystal": [
+            {
+                "name": "crystal-1.13.3",
+                "version": "1.13.3",
+                "label": "crystal"
+            }
+        ],
+        "D": [
+            {
+                "name": "dmd-2.109.1",
+                "version": "2.109.1",
+                "label": "dmd"
+            },
+            {
+                "name": "ldc-1.39.0",
+                "version": "1.39.0 dmd-2.109.1",
+                "label": "ldc"
+            },
+            {
+                "name": "gdc-head",
+                "version": "",
+                "label": "gdc HEAD"
+            }
+        ],
+        "Elixir": [
+            {
+                "name": "elixir-1.17.3",
+                "version": "1.17.3",
+                "label": "elixir"
+            },
+            {
+                "name": "elixir-1.16.3",
+                "version": "1.16.3",
+                "label": "elixir"
+            }
+        ],
+        "Erlang": [
+            {
+                "name": "erlang-27.1",
+                "version": "27.1",
+                "label": "erlang"
+            },
+            {
+                "name": "erlang-26.2.5.3",
+                "version": "26.2.5.3",
+                "label": "erlang"
+            },
+            {
+                "name": "erlang-25.3.2.13",
+                "version": "25.3.2.13",
+                "label": "erlang"
+            }
+        ],
+        "Go": [
+            {
+                "name": "go-1.23.2",
+                "version": "1.23.2",
+                "label": "go"
+            },
+            {
+                "name": "go-1.22.8",
+                "version": "1.22.8",
+                "label": "go"
+            },
+            {
+                "name": "go-1.16.3",
+                "version": "1.16.3",
+                "label": "go"
+            },
+            {
+                "name": "go-1.15.11",
+                "version": "1.15.11",
+                "label": "go"
+            },
+            {
+                "name": "go-1.14.15",
+                "version": "1.14.15",
+                "label": "go"
+            }
+        ],
+        "Groovy": [
+            {
+                "name": "groovy-4.0.23",
+                "version": "4.0.23",
+                "label": "Groovy"
+            }
+        ],
+        "Haskell": [
+            {
+                "name": "ghc-9.10.1",
+                "version": "9.10.1",
+                "label": "ghc"
+            },
+            {
+                "name": "ghc-9.0.1",
+                "version": "9.0.1",
+                "label": "ghc"
+            },
+            {
+                "name": "ghc-8.10.4",
+                "version": "8.10.4",
+                "label": "ghc"
+            }
+        ],
+        "Java": [
+            {
+                "name": "openjdk-jdk-22+36",
+                "version": "jdk-22+36",
+                "label": "OpenJDK"
+            },
+            {
+                "name": "openjdk-jdk-21+35",
+                "version": "jdk-21+35",
+                "label": "OpenJDK"
+            }
+        ],
+        "JavaScript": [
+            {
+                "name": "nodejs-20.17.0",
+                "version": "20.17.0",
+                "label": "Node.js"
+            },
+            {
+                "name": "nodejs-18.20.4",
+                "version": "18.20.4",
+                "label": "Node.js"
+            }
+        ],
+        "Julia": [
+            {
+                "name": "julia-1.10.5",
+                "version": "1.10.5",
+                "label": "Julia"
+            },
+            {
+                "name": "julia-1.6.1",
+                "version": "1.6.1",
+                "label": "Julia"
+            },
+            {
+                "name": "julia-1.0.5",
+                "version": "1.0.5",
+                "label": "Julia"
+            }
+        ],
+        "Lazy K": [
+            {
+                "name": "lazyk",
+                "version": "",
+                "label": "lazyk"
+            }
+        ],
+        "Lisp": [
+            {
+                "name": "clisp-2.49",
+                "version": "2.49",
+                "label": "CLISP"
+            },
+            {
+                "name": "sbcl-2.4.9",
+                "version": "2.4.9",
+                "label": "sbcl"
+            }
+        ],
+        "Lua": [
+            {
+                "name": "lua-5.4.7",
+                "version": "5.4.7",
+                "label": "Lua"
+            },
+            {
+                "name": "lua-5.3.6",
+                "version": "5.3.6",
+                "label": "Lua"
+            },
+            {
+                "name": "lua-5.2.4",
+                "version": "5.2.4",
+                "label": "Lua"
+            },
+            {
+                "name": "luajit-2.0.5",
+                "version": "2.0.5",
+                "label": "LuaJIT"
+            },
+            {
+                "name": "luajit-2.0.4",
+                "version": "2.0.4",
+                "label": "LuaJIT"
+            },
+            {
+                "name": "luajit-2.0.3",
+                "version": "2.0.3",
+                "label": "LuaJIT"
+            }
+        ],
+        "Nim": [
+            {
+                "name": "nim-2.2.10",
+                "version": "2.2.10",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.2.8",
+                "version": "2.2.8",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.2.6",
+                "version": "2.2.6",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.2.4",
+                "version": "2.2.4",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.2.2",
+                "version": "2.2.2",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.2.0",
+                "version": "2.2.0",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.0.16",
+                "version": "2.0.16",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.0.14",
+                "version": "2.0.14",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.0.10",
+                "version": "2.0.10",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.0.8",
+                "version": "2.0.8",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.0.6",
+                "version": "2.0.6",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.0.4",
+                "version": "2.0.4",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.0.2",
+                "version": "2.0.2",
+                "label": "nim"
+            },
+            {
+                "name": "nim-2.0.0",
+                "version": "2.0.0",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.6.20",
+                "version": "1.6.20",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.6.18",
+                "version": "1.6.18",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.6.14",
+                "version": "1.6.14",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.6.12",
+                "version": "1.6.12",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.6.10",
+                "version": "1.6.10",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.6.8",
+                "version": "1.6.8",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.6.6",
+                "version": "1.6.6",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.6.4",
+                "version": "1.6.4",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.6.0",
+                "version": "1.6.0",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.4.8",
+                "version": "1.4.8",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.4.6",
+                "version": "1.4.6",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.2.8",
+                "version": "1.2.8",
+                "label": "nim"
+            },
+            {
+                "name": "nim-1.0.10",
+                "version": "1.0.10",
+                "label": "nim"
+            }
+        ],
+        "OCaml": [
+            {
+                "name": "ocaml-5.2.0",
+                "version": "5.2.0",
+                "label": "ocaml"
+            },
+            {
+                "name": "ocaml-4.14.2",
+                "version": "4.14.2",
+                "label": "ocaml"
+            }
+        ],
+        "OpenSSL": [
+            {
+                "name": "openssl-3.3.2",
+                "version": "3.3.2",
+                "label": "OpenSSL"
+            },
+            {
+                "name": "openssl-1.1.1w",
+                "version": "1.1.1w",
+                "label": "OpenSSL"
+            },
+            {
+                "name": "openssl-1.0.2u",
+                "version": "1.0.2u",
+                "label": "OpenSSL"
+            },
+            {
+                "name": "openssl-0.9.8zh",
+                "version": "0.9.8zh",
+                "label": "OpenSSL"
+            }
+        ],
+        "Pascal": [
+            {
+                "name": "fpc-3.2.2",
+                "version": "3.2.2",
+                "label": "Free Pascal"
+            }
+        ],
+        "Perl": [
+            {
+                "name": "perl-5.42.0",
+                "version": "5.42.0",
+                "label": "perl"
+            },
+            {
+                "name": "perl-5.40.0",
+                "version": "5.40.0",
+                "label": "perl"
+            },
+            {
+                "name": "perl-5.38.0",
+                "version": "5.38.0",
+                "label": "perl"
+            },
+            {
+                "name": "perl-5.36.0",
+                "version": "5.36.0",
+                "label": "perl"
+            },
+            {
+                "name": "perl-5.34.0",
+                "version": "5.34.0",
+                "label": "perl"
+            },
+            {
+                "name": "perl-5.33.8",
+                "version": "5.33.8",
+                "label": "perl"
+            },
+            {
+                "name": "perl-5.32.1",
+                "version": "5.32.1",
+                "label": "perl"
+            },
+            {
+                "name": "perl-5.30.3",
+                "version": "5.30.3",
+                "label": "perl"
+            }
+        ],
+        "PHP": [
+            {
+                "name": "php-8.3.12",
+                "version": "8.3.12",
+                "label": "php"
+            },
+            {
+                "name": "php-8.2.24",
+                "version": "8.2.24",
+                "label": "php"
+            },
+            {
+                "name": "php-8.1.30",
+                "version": "8.1.30",
+                "label": "php"
+            },
+            {
+                "name": "php-8.0.30",
+                "version": "8.0.30",
+                "label": "php"
+            },
+            {
+                "name": "php-7.4.33",
+                "version": "7.4.33",
+                "label": "php"
+            },
+            {
+                "name": "php-5.6.40",
+                "version": "5.6.40",
+                "label": "php"
+            }
+        ],
+        "Pony": [
+            {
+                "name": "pony-0.58.5",
+                "version": "0.58.5",
+                "label": "pony"
+            }
+        ],
+        "Python": [
+            {
+                "name": "pypy-3.10-v7.3.17",
+                "version": "7.3.17 cpython-3.10.14",
+                "label": "pypy"
+            },
+            {
+                "name": "pypy-2.7-v7.3.17",
+                "version": "7.3.17 cpython-2.7.18",
+                "label": "pypy"
+            },
+            {
+                "name": "pypy-3.9-v7.3.16",
+                "version": "7.3.16 cpython-3.9.19",
+                "label": "pypy"
+            },
+            {
+                "name": "pypy-3.8-v7.3.11",
+                "version": "7.3.11 cpython-3.8.16",
+                "label": "pypy"
+            },
+            {
+                "name": "pypy-3.7-v7.3.9",
+                "version": "7.3.9 cpython-3.7.13",
+                "label": "pypy"
+            },
+            {
+                "name": "cpython-3.14.0",
+                "version": "3.14.0",
+                "label": "CPython"
+            },
+            {
+                "name": "cpython-3.13.8",
+                "version": "3.13.8",
+                "label": "CPython"
+            },
+            {
+                "name": "cpython-3.12.7",
+                "version": "3.12.7",
+                "label": "CPython"
+            },
+            {
+                "name": "cpython-3.11.10",
+                "version": "3.11.10",
+                "label": "CPython"
+            },
+            {
+                "name": "cpython-3.10.15",
+                "version": "3.10.15",
+                "label": "CPython"
+            },
+            {
+                "name": "cpython-3.9.20",
+                "version": "3.9.20",
+                "label": "CPython"
+            },
+            {
+                "name": "cpython-3.8.20",
+                "version": "3.8.20",
+                "label": "CPython"
+            },
+            {
+                "name": "cpython-3.7.17",
+                "version": "3.7.17",
+                "label": "CPython"
+            },
+            {
+                "name": "cpython-2.7.18",
+                "version": "2.7.18",
+                "label": "CPython"
+            },
+            {
+                "name": "cpython-head",
+                "version": "",
+                "label": "CPython HEAD"
+            },
+            {
+                "name": "cpython-2.7-head",
+                "version": "",
+                "label": "CPython2.7 HEAD"
+            }
+        ],
+        "R": [
+            {
+                "name": "r-4.4.1",
+                "version": "4.4.1",
+                "label": "R"
+            }
+        ],
+        "Ruby": [
+            {
+                "name": "ruby-4.0.2",
+                "version": "4.0.2",
+                "label": "ruby"
+            },
+            {
+                "name": "ruby-3.4.9",
+                "version": "3.4.9",
+                "label": "ruby"
+            },
+            {
+                "name": "ruby-3.3.11",
+                "version": "3.3.11",
+                "label": "ruby"
+            },
+            {
+                "name": "ruby-3.2.11",
+                "version": "3.2.11",
+                "label": "ruby"
+            },
+            {
+                "name": "ruby-3.1.7",
+                "version": "3.1.7",
+                "label": "ruby"
+            },
+            {
+                "name": "ruby-3.0.7",
+                "version": "3.0.7",
+                "label": "ruby"
+            },
+            {
+                "name": "mruby-3.0.0",
+                "version": "3.0.0",
+                "label": "mruby"
+            },
+            {
+                "name": "mruby-2.1.2",
+                "version": "2.1.2",
+                "label": "mruby"
+            }
+        ],
+        "Rust": [
+            {
+                "name": "rust-1.82.0",
+                "version": "1.82.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.81.0",
+                "version": "1.81.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.80.1",
+                "version": "1.80.1",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.79.0",
+                "version": "1.79.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.78.0",
+                "version": "1.78.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.77.2",
+                "version": "1.77.2",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.76.0",
+                "version": "1.76.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.75.0",
+                "version": "1.75.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.74.1",
+                "version": "1.74.1",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.73.0",
+                "version": "1.73.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.72.1",
+                "version": "1.72.1",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.71.1",
+                "version": "1.71.1",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.70.0",
+                "version": "1.70.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.69.0",
+                "version": "1.69.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.68.2",
+                "version": "1.68.2",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.67.1",
+                "version": "1.67.1",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.66.1",
+                "version": "1.66.1",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.65.0",
+                "version": "1.65.0",
+                "label": "rust"
+            },
+            {
+                "name": "rust-1.64.0",
+                "version": "1.64.0",
+                "label": "rust"
+            }
+        ],
+        "Scala": [
+            {
+                "name": "scala-3.5.1",
+                "version": "3.5.1",
+                "label": "Scala"
+            },
+            {
+                "name": "scala-3.3.4",
+                "version": "3.3.4",
+                "label": "Scala"
+            },
+            {
+                "name": "scala-2.13.15",
+                "version": "2.13.15",
+                "label": "Scala"
+            }
+        ],
+        "SQL": [
+            {
+                "name": "sqlite-3.46.1",
+                "version": "3.46.1",
+                "label": "sqlite"
+            },
+            {
+                "name": "sqlite-3.35.5",
+                "version": "3.35.5",
+                "label": "sqlite"
+            }
+        ],
+        "Swift": [
+            {
+                "name": "swift-6.0.1",
+                "version": "6.0.1",
+                "label": "Swift"
+            },
+            {
+                "name": "swift-5.10.1",
+                "version": "5.10.1",
+                "label": "Swift"
+            }
+        ],
+        "TypeScript": [
+            {
+                "name": "typescript-5.6.2",
+                "version": "5.6.2",
+                "label": "TypeScript"
+            }
+        ],
+        "Vim script": [
+            {
+                "name": "vim-9.1.0758",
+                "version": "9.1.0758",
+                "label": "Vim"
+            },
+            {
+                "name": "vim-8.2.5172",
+                "version": "8.2.5172",
+                "label": "Vim"
+            }
+        ],
+        "Zig": [
+            {
+                "name": "zig-0.13.0",
+                "version": "0.13.0",
+                "label": "zig"
+            },
+            {
+                "name": "zig-0.9.1",
+                "version": "0.9.1",
+                "label": "zig"
+            },
+            {
+                "name": "zig-head",
+                "version": "0.17.0-dev.1422+e863bf3be",
+                "label": "zig HEAD"
+            }
+        ]
+    }
+}
