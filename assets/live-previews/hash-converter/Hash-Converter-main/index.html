@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nucleus — hash & bcrypt lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e13;
+    --panel:#131a22;
+    --panel-2:#171f28;
+    --border:rgba(255,255,255,.08);
+    --border-strong:rgba(255,255,255,.16);
+    --ink:#e9edf2;
+    --muted:#8592a1;
+    --muted-2:#57626e;
+    --core:#d6a24c;
+    --core-bright:#f6d68f;
+
+    --c-md5:#e2685f;
+    --c-sha1:#e8a44c;
+    --c-sha256:#4ed6bf;
+    --c-sha384:#5aa9e6;
+    --c-sha512:#b48ce8;
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1000px 560px at 50% -8%, rgba(214,162,76,.09), transparent 60%),
+      radial-gradient(900px 500px at 100% 10%, rgba(90,169,230,.06), transparent 55%),
+      radial-gradient(800px 480px at 0% 30%, rgba(180,140,232,.05), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.5;
+    min-height:100vh;
+    padding:56px 24px 96px;
+  }
+  ::selection{background:rgba(214,162,76,.35);}
+  .wrap{max-width:980px;margin:0 auto;}
+
+  /* ---------- HEADER ---------- */
+  header{text-align:center;margin-bottom:8px;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--core);
+    padding:5px 11px;border:1px solid rgba(214,162,76,.35);
+    border-radius:100px;background:rgba(214,162,76,.06);
+    margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:"";width:6px;height:6px;border-radius:50%;
+    background:var(--core-bright);
+    box-shadow:0 0 0 3px rgba(214,162,76,.18);
+  }
+  h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:clamp(38px,6vw,58px);
+    line-height:1;
+    letter-spacing:.02em;
+    margin:0 0 16px;
+    background:linear-gradient(180deg,#fff,#c9d2db 70%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .lede{
+    color:var(--muted);
+    font-size:16px;
+    max-width:560px;
+    margin:0 auto;
+  }
+  .lede b{color:var(--ink);font-weight:600;}
+
+  /* ---------- ATOM HERO ---------- */
+  .atom-stage{
+    width:280px;height:280px;
+    margin:44px auto 6px;
+    position:relative;
+  }
+  .nucleus-core{
+    position:absolute;top:50%;left:50%;width:46px;height:46px;
+    margin:-23px 0 0 -23px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--core-bright), var(--core) 55%, #8a6524 100%);
+    box-shadow:0 0 24px 6px rgba(214,162,76,.4), 0 0 64px 18px rgba(214,162,76,.14);
+    animation:corePulse 2.8s ease-in-out infinite;
+    z-index:5;
+  }
+  @keyframes corePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+  .nucleus-core.energized{animation:coreEnergize .7s ease-out;}
+  @keyframes coreEnergize{
+    0%{box-shadow:0 0 24px 6px rgba(214,162,76,.4),0 0 64px 18px rgba(214,162,76,.14);transform:scale(1);}
+    35%{box-shadow:0 0 46px 16px rgba(246,214,143,.85),0 0 100px 34px rgba(246,214,143,.3);transform:scale(1.22);}
+    100%{box-shadow:0 0 24px 6px rgba(214,162,76,.4),0 0 64px 18px rgba(214,162,76,.14);transform:scale(1);}
+  }
+  .orbit-plane{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.09);}
+  .plane-0{inset:0;transform:rotateX(72deg) rotateZ(0deg);}
+  .plane-1{inset:16px;transform:rotateX(72deg) rotateZ(60deg);}
+  .plane-2{inset:32px;transform:rotateX(72deg) rotateZ(120deg);}
+  .spin{position:absolute;inset:-1px;animation:spin linear infinite;}
+  @keyframes spin{to{transform:rotateZ(360deg);}}
+  .electron{
+    position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;
+    border-radius:50%;
+  }
+  .e-md5{background:var(--c-md5);box-shadow:0 0 10px 3px var(--c-md5);}
+  .e-sha1{background:var(--c-sha1);box-shadow:0 0 10px 3px var(--c-sha1);}
+  .e-sha256{background:var(--c-sha256);box-shadow:0 0 10px 3px var(--c-sha256);}
+  .e-sha384{background:var(--c-sha384);box-shadow:0 0 10px 3px var(--c-sha384);}
+  .e-sha512{background:var(--c-sha512);box-shadow:0 0 10px 3px var(--c-sha512);}
+
+  .legend{
+    display:flex;justify-content:center;flex-wrap:wrap;gap:18px;
+    margin:18px 0 48px;
+  }
+  .legend-item{
+    display:flex;align-items:center;gap:7px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);
+  }
+  .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+  /* ---------- CARD ---------- */
+  .card{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+  }
+  .specimen{margin-bottom:8px;}
+  .field-label{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted-2);margin-bottom:10px;
+  }
+  #countMeta{color:var(--muted);}
+  textarea{
+    width:100%;resize:vertical;min-height:96px;
+    background:#080b0f;border:1px solid var(--border);border-radius:10px;
+    color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:15px;
+    padding:16px;outline:none;
+    transition:border-color .18s ease, box-shadow .18s ease;
+  }
+  textarea::placeholder{color:var(--muted-2);}
+  textarea:focus{border-color:var(--core);box-shadow:0 0 0 3px rgba(214,162,76,.15);}
+
+  /* ---------- SECTION LABEL ---------- */
+  .section-head{display:flex;align-items:center;gap:14px;margin:44px 0 18px;}
+  .section-head h2{
+    font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:0;white-space:nowrap;
+  }
+  .section-head .rule{height:1px;flex:1;background:var(--border);}
+
+  /* ---------- ISOTOPE TILES ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+  .hcard{
+    position:relative;overflow:hidden;
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--border);border-radius:var(--radius);
+    transition:border-color .2s ease;
+  }
+  .hcard:hover{border-color:var(--border-strong);}
+  .tile-head{
+    position:relative;
+    display:flex;justify-content:space-between;align-items:flex-start;
+    padding:14px 16px 34px;
+    border-bottom:1px solid var(--border);
+  }
+  .tile-head::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg, var(--accent) 0%, transparent 55%);
+    opacity:.14;
+  }
+  .tile-number{
+    position:relative;
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+    border:1px solid var(--border);padding:2px 7px;border-radius:100px;
+  }
+  .tile-symbol{
+    position:absolute;left:16px;bottom:8px;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;
+    color:var(--accent);letter-spacing:.01em;
+  }
+  .tile-name{
+    position:relative;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;
+    color:var(--muted);
+  }
+  .tile-body{padding:16px;}
+  .hex-out{
+    display:flex;flex-wrap:wrap;
+    font-family:'JetBrains Mono',monospace;font-size:13px;
+    word-break:break-all;color:var(--accent);min-height:20px;letter-spacing:.01em;
+  }
+  .hex-out .tchar{transition:color .1s ease;}
+  .hex-out.empty{color:var(--muted-2);}
+  .hcard-foot{display:flex;justify-content:flex-end;margin-top:14px;}
+  .copy-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    background:transparent;border:1px solid var(--border);color:var(--muted);
+    font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;
+    padding:6px 12px;border-radius:8px;cursor:pointer;transition:all .15s ease;
+  }
+  .copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .copy-btn.copied{border-color:#4ed6bf;color:#4ed6bf;}
+
+  /* ---------- BCRYPT ---------- */
+  .bc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:720px){.bc-grid{grid-template-columns:1fr;}}
+  .bc-card h3{font-family:'Space Grotesk',sans-serif;font-size:16px;margin:0 0 4px;}
+  .bc-sub{color:var(--muted);font-size:13px;margin:0 0 18px;}
+  label.small{
+    display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;
+  }
+  input[type="text"]{
+    width:100%;background:#080b0f;border:1px solid var(--border);border-radius:9px;
+    color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:14px;
+    padding:11px 13px;outline:none;margin-bottom:16px;
+    transition:border-color .18s ease, box-shadow .18s ease;
+  }
+  input[type="text"]:focus{border-color:var(--core);box-shadow:0 0 0 3px rgba(214,162,76,.15);}
+  .rounds-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+  input[type="range"]{flex:1;accent-color:var(--core);height:4px;}
+  .rounds-val{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--core-bright);min-width:70px;text-align:right;}
+  .press-btn{
+    width:100%;background:var(--core);color:#1a1305;border:none;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;
+    padding:12px 16px;border-radius:9px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .press-btn:hover{background:var(--core-bright);}
+  .press-btn:active{transform:scale(.98);}
+  .press-btn:disabled{opacity:.55;cursor:progress;}
+  .spinner{
+    width:14px;height:14px;border-radius:50%;
+    border:2px solid rgba(26,19,5,.35);border-top-color:#1a1305;
+    animation:spinBtn .7s linear infinite;display:none;
+  }
+  .press-btn.loading .spinner{display:inline-block;}
+  @keyframes spinBtn{to{transform:rotate(360deg);}}
+  .bc-output{
+    margin-top:16px;background:#080b0f;border:1px solid var(--border);border-radius:9px;
+    padding:13px 14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;
+    color:var(--muted);word-break:break-all;min-height:20px;
+  }
+  .bc-output.filled{color:var(--core-bright);}
+  .verify-result{
+    margin-top:16px;display:flex;align-items:center;gap:12px;
+    padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:#080b0f;
+    opacity:0;transform:translateY(6px) scale(.97);
+    transition:opacity .3s ease, transform .3s ease, border-color .3s ease, background .3s ease;
+  }
+  .verify-result.show{opacity:1;transform:translateY(0) scale(1);}
+  .verify-result.match{border-color:rgba(78,214,191,.5);background:rgba(78,214,191,.07);}
+  .verify-result.nomatch{border-color:rgba(226,104,95,.5);background:rgba(226,104,95,.07);}
+  .seal{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;
+    flex-shrink:0;transform:scale(0) rotate(-25deg);
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .verify-result.show .seal{transform:scale(1) rotate(0deg);}
+  .match .seal{background:rgba(78,214,191,.18);color:#4ed6bf;border:1.5px solid #4ed6bf;}
+  .nomatch .seal{background:rgba(226,104,95,.18);color:#e2685f;border:1.5px solid #e2685f;}
+  .verify-text b{display:block;font-family:'Space Grotesk',sans-serif;font-size:14.5px;}
+  .verify-text span{font-size:12.5px;color:var(--muted);}
+  .match .verify-text b{color:#4ed6bf;}
+  .nomatch .verify-text b{color:#e2685f;}
+
+  footer{
+    margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
+    color:var(--muted-2);font-size:12.5px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  }
+  footer b{color:var(--muted);}
+
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Client-side · nothing leaves your browser</div>
+    <h1>NUCLEUS</h1>
+    <p class="lede">Type something once and watch it decay into five different isotopes — MD5 through SHA-512 — the instant you stop typing. <b>Hashing only runs one direction</b>: nothing here decodes a hash back to text. Use the chamber below to test a candidate against a known bcrypt hash instead.</p>
+  </header>
+
+  <div class="atom-stage" id="atomStage">
+    <div class="nucleus-core" id="nucleusCore"></div>
+    <div class="orbit-plane plane-0">
+      <div class="spin" style="animation-duration:10s;"><span class="electron e-md5"></span></div>
+      <div class="spin" style="animation-duration:10s;animation-delay:-5s;"><span class="electron e-sha384"></span></div>
+    </div>
+    <div class="orbit-plane plane-1">
+      <div class="spin" style="animation-duration:13s;"><span class="electron e-sha1"></span></div>
+      <div class="spin" style="animation-duration:13s;animation-delay:-6.5s;"><span class="electron e-sha512"></span></div>
+    </div>
+    <div class="orbit-plane plane-2">
+      <div class="spin" style="animation-duration:16s;"><span class="electron e-sha256"></span></div>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:var(--c-md5)"></span>MD5</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--c-sha1)"></span>SHA-1</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--c-sha256)"></span>SHA-256</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--c-sha384)"></span>SHA-384</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--c-sha512)"></span>SHA-512</div>
+  </div>
+
+  <div class="card specimen">
+    <div class="field-label">
+      <span>Specimen text</span>
+      <span id="countMeta">0 characters</span>
+    </div>
+    <textarea id="input" placeholder="Start typing — every isotope below updates as you go…"></textarea>
+  </div>
+
+  <div class="section-head"><h2>Isotopes</h2><div class="rule"></div></div>
+  <div class="grid" id="hashGrid"></div>
+
+  <div class="section-head"><h2>Bcrypt · decay chamber</h2><div class="rule"></div></div>
+  <div class="bc-grid">
+
+    <div class="card bc-card">
+      <h3>Press a hash</h3>
+      <p class="bc-sub">Bcrypt bakes in a random salt, so pressing the same text twice gives two different hashes — both still valid.</p>
+      <label class="small">Text to hash</label>
+      <input type="text" id="bcInput" placeholder="e.g. a password">
+      <label class="small">Cost factor (rounds)</label>
+      <div class="rounds-row">
+        <input type="range" id="bcRounds" min="4" max="12" value="10">
+        <span class="rounds-val" id="bcRoundsVal">10 (2¹⁰)</span>
+      </div>
+      <button class="press-btn" id="bcPressBtn">
+        <span class="spinner"></span><span id="bcPressLabel">Press bcrypt hash</span>
+      </button>
+      <div class="bc-output" id="bcOutput">Your hash will land here</div>
+    </div>
+
+    <div class="card bc-card">
+      <h3>Test a match</h3>
+      <p class="bc-sub">Bcrypt can't be reversed either — the only way to "check" a hash is to test a candidate text against it.</p>
+      <label class="small">Candidate text</label>
+      <input type="text" id="vText" placeholder="Text to test">
+      <label class="small">Bcrypt hash</label>
+      <input type="text" id="vHash" placeholder="$2a$10$…">
+      <button class="press-btn" id="vBtn">
+        <span class="spinner"></span><span id="vBtnLabel">Compare</span>
+      </button>
+      <div class="verify-result" id="vResult">
+        <div class="seal" id="vSeal">✓</div>
+        <div class="verify-text"><b id="vTitle">—</b><span id="vSub">Run a comparison to see the result</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span><b>5</b> algorithms, computed locally with the Web Crypto API + bcrypt.js</span>
+    <span>No input is ever sent to a server</span>
+    <span>Made by <b>Jayner</b></span>
+  </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bcryptjs@3.0.3/umd/index.min.js"></script>
+<script>
+/* ===================== MD5 (vanilla JS, RFC 1321) ===================== */
+function md5(input){
+  function rotl(x,n){return (x<<n)|(x>>>(32-n));}
+  function addU(x,y){
+    const lsw=(x&0xffff)+(y&0xffff), msw=(x>>>16)+(y>>>16)+(lsw>>>16);
+    return (msw<<16)|(lsw&0xffff);
+  }
+  function F(x,y,z){return (x&y)|(~x&z);}
+  function G(x,y,z){return (x&z)|(y&~z);}
+  function H(x,y,z){return x^y^z;}
+  function I(x,y,z){return y^(x|~z);}
+  function toWords(str){
+    const n = str.length;
+    const nWords = (((n + 8) >> 6) + 1) * 16;
+    const words = new Array(nWords).fill(0);
+    for (let i=0;i<n;i++){
+      words[i>>2] |= (str.charCodeAt(i) & 0xff) << ((i % 4) * 8);
+    }
+    words[n>>2] |= 0x80 << ((n % 4) * 8);
+    words[nWords - 2] = n * 8;
+    return words;
+  }
+  function toHex(num){
+    let s='', v;
+    for (let i=0;i<4;i++){
+      v = (num >>> (i*8)) & 0xff;
+      s += ('0'+v.toString(16)).slice(-2);
+    }
+    return s;
+  }
+  const utf8 = unescape(encodeURIComponent(input));
+  const x = toWords(utf8);
+  let a=1732584193, b=-271733879, c=-1732584194, d=271733878;
+  const K = [
+    0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,
+    0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,0x6b901122,0xfd987193,0xa679438e,0x49b40821,
+    0xf61e2562,0xc040b340,0x265e5a51,0xe9b6c7aa,0xd62f105d,0x02441453,0xd8a1e681,0xe7d3fbc8,
+    0x21e1cde6,0xc33707d6,0xf4d50d87,0x455a14ed,0xa9e3e905,0xfcefa3f8,0x676f02d9,0x8d2a4c8a,
+    0xfffa3942,0x8771f681,0x6d9d6122,0xfde5380c,0xa4beea44,0x4bdecfa9,0xf6bb4b60,0xbebfbc70,
+    0x289b7ec6,0xeaa127fa,0xd4ef3085,0x04881d05,0xd9d4d039,0xe6db99e5,0x1fa27cf8,0xc4ac5665,
+    0xf4292244,0x432aff97,0xab9423a7,0xfc93a039,0x655b59c3,0x8f0ccc92,0xffeff47d,0x85845dd1,
+    0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391
+  ];
+  const S = [7,12,17,22,7,12,17,22,7,12,17,22,7,12,17,22,
+             5,9,14,20,5,9,14,20,5,9,14,20,5,9,14,20,
+             4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23,
+             6,10,15,21,6,10,15,21,6,10,15,21,6,10,15,21];
+  for (let k=0;k<x.length;k+=16){
+    let A=a,B=b,C=c,D=d;
+    for (let i=0;i<64;i++){
+      let f,g;
+      if (i<16){f=F(B,C,D); g=i;}
+      else if (i<32){f=G(B,C,D); g=(5*i+1)%16;}
+      else if (i<48){f=H(B,C,D); g=(3*i+5)%16;}
+      else {f=I(B,C,D); g=(7*i)%16;}
+      f = addU(addU(addU(f,A),K[i]), x[k+g] || 0);
+      A=D; D=C; C=B;
+      B = addU(B, rotl(f, S[i]));
+    }
+    a=addU(a,A); b=addU(b,B); c=addU(c,C); d=addU(d,D);
+  }
+  return toHex(a)+toHex(b)+toHex(c)+toHex(d);
+}
+
+/* ===================== ISOTOPE TILE SETUP ===================== */
+const ALGOS = [
+  {id:'md5',    name:'MD5',     bits:'128-bit', symbol:'Md', accent:'var(--c-md5)'},
+  {id:'sha1',   name:'SHA-1',   bits:'160-bit', symbol:'S1', accent:'var(--c-sha1)'},
+  {id:'sha256', name:'SHA-256', bits:'256-bit', symbol:'256',accent:'var(--c-sha256)'},
+  {id:'sha384', name:'SHA-384', bits:'384-bit', symbol:'384',accent:'var(--c-sha384)'},
+  {id:'sha512', name:'SHA-512', bits:'512-bit', symbol:'512',accent:'var(--c-sha512)'}
+];
+
+const grid = document.getElementById('hashGrid');
+ALGOS.forEach(algo=>{
+  const card = document.createElement('div');
+  card.className = 'hcard';
+  card.style.setProperty('--accent', algo.accent);
+  card.innerHTML = `
+    <div class="tile-head">
+      <span class="tile-name">${algo.name}</span>
+      <span class="tile-number">${algo.bits}</span>
+      <span class="tile-symbol">${algo.symbol}</span>
+    </div>
+    <div class="tile-body">
+      <div class="hex-out empty" id="out-${algo.id}">waiting for input…</div>
+      <div class="hcard-foot">
+        <button class="copy-btn" data-target="${algo.id}">Copy</button>
+      </div>
+    </div>`;
+  grid.appendChild(card);
+});
+
+/* ===================== TUMBLER REVEAL ANIMATION ===================== */
+const HEX = '0123456789abcdef';
+function revealHash(id, finalHex){
+  const el = document.getElementById('out-'+id);
+  if (el._timer) clearInterval(el._timer);
+  el.classList.remove('empty');
+  el.innerHTML = '';
+  const spans = [];
+  const len = finalHex.length;
+  for (let i=0;i<len;i++){
+    const s = document.createElement('span');
+    s.className = 'tchar';
+    s.textContent = HEX[Math.random()*16|0];
+    el.appendChild(s);
+    spans.push(s);
+  }
+  let frame = 0;
+  const totalFrames = 16;
+  el._timer = setInterval(()=>{
+    frame++;
+    let allLocked = true;
+    spans.forEach((s,i)=>{
+      const lockAt = 4 + Math.floor((i/len) * totalFrames);
+      if (frame >= lockAt){
+        if (!s.classList.contains('locked')){
+          s.textContent = finalHex[i];
+          s.classList.add('locked');
+        }
+      } else {
+        allLocked = false;
+        s.textContent = HEX[Math.random()*16|0];
+      }
+    });
+    if (allLocked){ clearInterval(el._timer); }
+  }, 32);
+}
+function showEmpty(){
+  ALGOS.forEach(a=>{
+    const el = document.getElementById('out-'+a.id);
+    if (el._timer) clearInterval(el._timer);
+    el.classList.add('empty');
+    el.textContent = 'waiting for input…';
+  });
+}
+
+/* ===================== LIVE COMPUTE ===================== */
+function bufToHex(buf){
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+let genId = 0;
+const input = document.getElementById('input');
+const countMeta = document.getElementById('countMeta');
+const nucleusCore = document.getElementById('nucleusCore');
+let debounceTimer = null;
+
+async function computeAll(text){
+  const myGen = ++genId;
+  if (text.length === 0){ showEmpty(); return; }
+
+  revealHash('md5', md5(text));
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const shaAlgos = [['sha1','SHA-1'],['sha256','SHA-256'],['sha384','SHA-384'],['sha512','SHA-512']];
+  for (const [id, cryptoName] of shaAlgos){
+    const buf = await crypto.subtle.digest(cryptoName, data);
+    if (myGen !== genId) return;
+    revealHash(id, bufToHex(buf));
+  }
+}
+
+input.addEventListener('input', ()=>{
+  const text = input.value;
+  countMeta.textContent = `${text.length} character${text.length===1?'':'s'}`;
+  nucleusCore.classList.remove('energized');
+  void nucleusCore.offsetWidth;
+  nucleusCore.classList.add('energized');
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(()=>computeAll(text), 160);
+});
+
+showEmpty();
+
+/* ===================== COPY BUTTONS ===================== */
+grid.addEventListener('click', async (e)=>{
+  const btn = e.target.closest('.copy-btn');
+  if (!btn) return;
+  const target = document.getElementById('out-'+btn.dataset.target);
+  const text = target.textContent;
+  if (!text || target.classList.contains('empty')) return;
+  try{
+    await navigator.clipboard.writeText(text);
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('copied'); }, 1400);
+  }catch(err){
+    btn.textContent = 'Press ⌘/Ctrl+C';
+  }
+});
+
+/* ===================== BCRYPT ===================== */
+const bcryptLib = window.bcrypt || (window.dcodeIO && window.dcodeIO.bcrypt);
+
+const bcRounds = document.getElementById('bcRounds');
+const bcRoundsVal = document.getElementById('bcRoundsVal');
+bcRounds.addEventListener('input', ()=>{
+  bcRoundsVal.textContent = `${bcRounds.value} (2${toSup(bcRounds.value)})`;
+});
+function toSup(n){
+  const map = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+  return String(n).split('').map(d=>map[d]||d).join('');
+}
+bcRoundsVal.textContent = `10 (2¹⁰)`;
+
+const bcPressBtn = document.getElementById('bcPressBtn');
+const bcPressLabel = document.getElementById('bcPressLabel');
+const bcOutput = document.getElementById('bcOutput');
+
+bcPressBtn.addEventListener('click', async ()=>{
+  const text = document.getElementById('bcInput').value;
+  if (!text){ bcOutput.textContent = 'Type something to hash first'; bcOutput.classList.remove('filled'); return; }
+  if (!bcryptLib){ bcOutput.textContent = 'Bcrypt library failed to load — check your connection'; return; }
+
+  bcPressBtn.disabled = true;
+  bcPressBtn.classList.add('loading');
+  bcPressLabel.textContent = 'Pressing…';
+  await new Promise(r=>setTimeout(r, 30));
+
+  setTimeout(()=>{
+    try{
+      const rounds = parseInt(bcRounds.value, 10);
+      const salt = bcryptLib.genSaltSync(rounds);
+      const hash = bcryptLib.hashSync(text, salt);
+      bcOutput.textContent = hash;
+      bcOutput.classList.add('filled');
+    }catch(err){
+      bcOutput.textContent = 'Something went wrong generating that hash';
+      bcOutput.classList.remove('filled');
+    }
+    bcPressBtn.disabled = false;
+    bcPressBtn.classList.remove('loading');
+    bcPressLabel.textContent = 'Press bcrypt hash';
+  }, 20);
+});
+
+/* ===================== VERIFY ===================== */
+const vBtn = document.getElementById('vBtn');
+const vBtnLabel = document.getElementById('vBtnLabel');
+const vResult = document.getElementById('vResult');
+const vSeal = document.getElementById('vSeal');
+const vTitle = document.getElementById('vTitle');
+const vSub = document.getElementById('vSub');
+
+vBtn.addEventListener('click', ()=>{
+  const text = document.getElementById('vText').value;
+  const hash = document.getElementById('vHash').value.trim();
+
+  if (!text || !hash){
+    vResult.className = 'verify-result show';
+    vSeal.textContent = '!';
+    vTitle.textContent = 'Missing input';
+    vSub.textContent = 'Fill in both the candidate text and the hash';
+    return;
+  }
+  if (!bcryptLib){
+    vResult.className = 'verify-result show';
+    vSeal.textContent = '!';
+    vTitle.textContent = 'Library unavailable';
+    vSub.textContent = 'Bcrypt library failed to load';
+    return;
+  }
+
+  vBtn.disabled = true;
+  vBtn.classList.add('loading');
+  vBtnLabel.textContent = 'Comparing…';
+
+  setTimeout(()=>{
+    let isMatch = false;
+    try{ isMatch = bcryptLib.compareSync(text, hash); }catch(err){ isMatch = false; }
+
+    vResult.classList.remove('show','match','nomatch');
+    void vResult.offsetWidth;
+    if (isMatch){
+      vResult.classList.add('match');
+      vSeal.textContent = '✓';
+      vTitle.textContent = 'Match';
+      vSub.textContent = 'That text produces this exact hash';
+    } else {
+      vResult.classList.add('nomatch');
+      vSeal.textContent = '✕';
+      vTitle.textContent = 'No match';
+      vSub.textContent = "That text doesn't produce this hash";
+    }
+    requestAnimationFrame(()=> vResult.classList.add('show'));
+
+    vBtn.disabled = false;
+    vBtn.classList.remove('loading');
+    vBtnLabel.textContent = 'Compare';
+  }, 20);
+});
+</script>
+</body>
+</html>
