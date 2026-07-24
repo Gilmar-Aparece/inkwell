@@ -1,0 +1,1 @@
+NOTE: delete /search-users.php from your server — it's been replaced by /search-people.php and is no longer used.
