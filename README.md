@@ -154,7 +154,72 @@ Adding an exam for a new language: add a matching top-level key to
 `data/exams.php` (same key as in `data/lessons.php`) with `title`,
 `passScore`, and a `questions` array.
 
-## About the source-view deterrent
+## Accounts, teacher-authored exams, and admin approval
+
+On top of the built-in self-study exams above, Inkwell now supports real
+accounts:
+
+- **`register.php`** — anyone can register as a **student** (active
+  immediately) or a **teacher** (starts `pending`).
+- **`login.php` / `logout.php`** — site-wide login for students and
+  teachers (separate from `/admin/login.php`, which is only for you as
+  the site owner).
+- **Admin approval = permission to add exams.** In `/admin/index.php`,
+  the new "Teacher accounts" section lists every teacher with
+  Approve/Revoke/Disable buttons. A teacher can't create an exam
+  category until an admin approves them; revoking flips them back to
+  pending without deleting their account.
+- **`teacher/dashboard.php`** — once approved, a teacher creates exam
+  **categories** (title, description, pass score) and adds
+  multiple-choice **questions** to each one from `teacher/category.php`.
+- **`exams.php`** — the browse page students see: the original
+  self-study language exams in one table, and every approved teacher's
+  exam categories in another, each showing the teacher's name.
+- **Per-exam choice of teacher or self-study.** A student doesn't pick a
+  teacher once at registration — every time they go to take an exam
+  they choose, from `exams.php`, either a self-study exam or a specific
+  teacher's exam category. The resulting certificate records which one
+  it was ("with Jane Dela Cruz" or "self-study").
+
+This required a real database (student/teacher accounts, teacher exam
+content, and new certificates all live in MySQL now — see
+**`includes/schema.sql`**, imported once via phpMyAdmin, and
+**`includes/db.php`**, where you set your host's DB credentials).
+Certificates issued before this feature remain readable from the old
+`data-store/certificates.json`; `certificate.php` checks the database
+first and falls back to that file automatically. The original per-language
+exams in `data/exams.php` are untouched and still work exactly as before,
+just now requiring login so the certificate can be tied to an account.
+
+## Deans and schools
+
+A third role sits above teacher/student: **dean**.
+
+- **`register.php`** now has a third role card, **Dean** — like teachers,
+  dean accounts start `pending` and need admin approval before they can do
+  anything.
+- Once an admin approves a dean from `/admin/index.php` ("Dean accounts"
+  section), the dean logs in and lands on **`dean/dashboard.php`**, where
+  they first create their **school** (name + logo image).
+- After the school exists, the dean can **add teacher accounts directly**
+  from the same page — those teachers are created already `active` (no
+  separate admin approval needed, since the dean is vouching for them) and
+  are tagged with `school_id` so you can see which school each one belongs
+  to. Teachers can *still* self-register the old way too (`register.php`
+  → Teacher), which still requires admin approval as before — both paths
+  coexist.
+- The dean can also edit their school's name and swap the logo at any time
+  from the same dashboard.
+
+If you already imported an older `includes/schema.sql` and just want to
+add this feature without touching existing data, run the **MIGRATION**
+block at the very bottom of that file instead of the full dump — it adds
+the `dean` role, the `schools` table, the `class_codes` table (used for
+the upcoming class-join-code feature), and the new `users` columns
+(`school_id`, `avatar`, `created_by`) via `ALTER TABLE` / `CREATE TABLE IF
+NOT EXISTS`, which won't clobber anything already there.
+
+
 
 `assets/js/protect.js` disables right-click and the common "view
 source"/DevTools shortcuts (Ctrl+U, F12, Ctrl+Shift+I/J/C), showing a
