@@ -12,6 +12,7 @@ $INKWELL_LESSONS = [
 
   'html' => [
     'label' => 'HTML',
+    'course' => 'BSIT',
     'color' => '#c9622b',
     'tagline' => 'Structure the page',
     'runnable' => true,
@@ -45,6 +46,7 @@ $INKWELL_LESSONS = [
 
   'css' => [
     'label' => 'CSS',
+    'course' => 'BSIT',
     'color' => '#2d5c4c',
     'tagline' => 'Style what you built',
     'runnable' => true,
@@ -78,6 +80,7 @@ $INKWELL_LESSONS = [
 
   'js' => [
     'label' => 'JavaScript',
+    'course' => 'BSIT',
     'color' => '#3b5fe0',
     'tagline' => 'Make it interactive',
     'runnable' => true,
@@ -111,6 +114,7 @@ $INKWELL_LESSONS = [
 
   'php' => [
     'label' => 'PHP',
+    'course' => 'BSIT',
     'color' => '#8a3ffc',
     'tagline' => 'Run it on the server',
     'runnable' => false,
@@ -140,6 +144,7 @@ $INKWELL_LESSONS = [
 
   'c' => [
     'label' => 'C',
+    'course' => 'BSIT',
     'color' => '#5c6bc0',
     'tagline' => 'Close to the machine',
     'runnable' => false,
@@ -169,6 +174,7 @@ $INKWELL_LESSONS = [
 
   'cpp' => [
     'label' => 'C++',
+    'course' => 'BSIT',
     'color' => '#00599c',
     'tagline' => 'C with objects',
     'runnable' => false,
@@ -198,6 +204,7 @@ $INKWELL_LESSONS = [
 
   'java' => [
     'label' => 'Java',
+    'course' => 'BSIT',
     'color' => '#e76f00',
     'tagline' => 'Write once, run anywhere',
     'runnable' => false,
@@ -227,6 +234,7 @@ $INKWELL_LESSONS = [
 
   'python' => [
     'label' => 'Python',
+    'course' => 'BSIT',
     'color' => '#3776ab',
     'tagline' => 'Readable by design',
     'runnable' => false,
@@ -256,6 +264,7 @@ $INKWELL_LESSONS = [
 
   'csharp' => [
     'label' => 'C#',
+    'course' => 'BSIT',
     'color' => '#68217a',
     'tagline' => 'Microsoft\'s managed language',
     'runnable' => false,
@@ -284,16 +293,174 @@ $INKWELL_LESSONS = [
   ],
 ];
 
-/** Return the whole category list (for nav/home). */
+/**
+ * ---------------- Admin-editable lesson overrides ----------------
+ * Lets an admin add, edit, or delete lessons within any existing category
+ * from admin/lessons.php, without touching this file. Stored as JSON via
+ * includes/store.php, the same "no database required" pattern used for
+ * certificates/config. Shape:
+ *   { "html": { "lessons": { "intro": {...} , "new-slug": {...}, "deleted-slug": null } } }
+ * A lesson value of null means "deleted" (removed from the built-in set).
+ */
+function inkwell_lesson_overrides() {
+  require_once __DIR__ . '/../includes/store.php';
+  $data = inkwell_read_json('lessons_overrides.json', []);
+  return is_array($data) ? $data : [];
+}
+
+function inkwell_save_lesson_override($cat, $slug, array $lesson) {
+  require_once __DIR__ . '/../includes/store.php';
+  $overrides = inkwell_lesson_overrides();
+  $overrides[$cat]['lessons'][$slug] = $lesson;
+  return inkwell_write_json('lessons_overrides.json', $overrides);
+}
+
+function inkwell_delete_lesson_override($cat, $slug) {
+  require_once __DIR__ . '/../includes/store.php';
+  $overrides = inkwell_lesson_overrides();
+  $overrides[$cat]['lessons'][$slug] = null;
+  return inkwell_write_json('lessons_overrides.json', $overrides);
+}
+
+/**
+ * Creates or edits a whole track/category (e.g. adds "Ruby" as a new
+ * language track) via admin/lessons.php, on top of the built-in
+ * $INKWELL_LESSONS list. Built-in categories can't be deleted, only
+ * custom ones added here.
+ */
+function inkwell_save_category_override($catKey, array $meta) {
+  require_once __DIR__ . '/../includes/store.php';
+  $overrides = inkwell_lesson_overrides();
+  $overrides[$catKey]['label'] = $meta['label'];
+  $overrides[$catKey]['color'] = $meta['color'];
+  $overrides[$catKey]['tagline'] = $meta['tagline'];
+  $overrides[$catKey]['runnable'] = !empty($meta['runnable']);
+  $overrides[$catKey]['course'] = inkwell_normalize_lesson_course($meta['course'] ?? '');
+  if (!isset($overrides[$catKey]['lessons']) || !is_array($overrides[$catKey]['lessons'])) {
+    $overrides[$catKey]['lessons'] = [];
+  }
+  return inkwell_write_json('lessons_overrides.json', $overrides);
+}
+
+/** Deletes a custom (non-built-in) track entirely. */
+function inkwell_delete_category_override($catKey) {
+  global $INKWELL_LESSONS;
+  if (isset($INKWELL_LESSONS[$catKey])) return false; // never delete a built-in track
+  require_once __DIR__ . '/../includes/store.php';
+  $overrides = inkwell_lesson_overrides();
+  unset($overrides[$catKey]);
+  return inkwell_write_json('lessons_overrides.json', $overrides);
+}
+
+/** True if this category exists only as an admin-added track (not built-in). */
+function inkwell_is_custom_category($catKey) {
+  global $INKWELL_LESSONS;
+  return !isset($INKWELL_LESSONS[$catKey]);
+}
+
+/** Merges built-in lesson data with admin overrides. Cached per-request. */
 function inkwell_categories() {
   global $INKWELL_LESSONS;
-  return $INKWELL_LESSONS;
+  static $merged = null;
+  if ($merged !== null) return $merged;
+
+  $merged = $INKWELL_LESSONS;
+  foreach (inkwell_lesson_overrides() as $catKey => $catOverride) {
+    if (!is_array($catOverride)) continue;
+    if (!isset($merged[$catKey])) {
+      // Brand-new, admin-created track.
+      $merged[$catKey] = [
+        'label' => $catOverride['label'] ?? ucfirst($catKey),
+        'color' => $catOverride['color'] ?? '#2d5c4c',
+        'tagline' => $catOverride['tagline'] ?? '',
+        'runnable' => !empty($catOverride['runnable']),
+        'course' => inkwell_normalize_lesson_course($catOverride['course'] ?? ''),
+        'lessons' => [],
+      ];
+    } else {
+      // Existing built-in track — allow label/color/tagline/course edits too.
+      foreach (['label', 'color', 'tagline', 'course'] as $field) {
+        if (isset($catOverride[$field])) $merged[$catKey][$field] = $catOverride[$field];
+      }
+    }
+    $merged[$catKey]['course'] = inkwell_normalize_lesson_course($merged[$catKey]['course'] ?? '');
+    if (empty($catOverride['lessons']) || !is_array($catOverride['lessons'])) continue;
+    foreach ($catOverride['lessons'] as $slug => $lessonData) {
+      if ($lessonData === null) {
+        unset($merged[$catKey]['lessons'][$slug]);
+      } else {
+        $merged[$catKey]['lessons'][$slug] = $lessonData;
+      }
+    }
+  }
+  return $merged;
+}
+
+/**
+ * A lesson track's `course` field stores a department *code* (e.g. "BSIT"),
+ * matching the same `departments` table used for teachers/deans/subjects
+ * (see includes/departments.php) — so adding a department there
+ * automatically makes it available here too, no code change needed.
+ * Trims/uppercases and falls back to "BSIT" when blank, since every
+ * built-in track is a programming lesson.
+ */
+function inkwell_normalize_lesson_course($code) {
+  $code = strtoupper(trim((string) $code));
+  return $code !== '' ? $code : 'BSIT';
+}
+
+/**
+ * Groups every track by department, in department-code order, using the
+ * live `departments` table so newly added departments (Registrar/Admin ->
+ * Departments) show up automatically. A department with no tracks yet
+ * still comes back with an empty array, so the page can render its
+ * section (with an empty state) instead of hiding it entirely. Any track
+ * whose course code doesn't match a current department (e.g. the
+ * department was later renamed/deleted) is bucketed under "Other".
+ */
+function inkwell_categories_by_course() {
+  require_once __DIR__ . '/../includes/departments.php';
+
+  $departments = [];
+  try {
+    $departments = inkwell_list_departments();
+  } catch (Throwable $e) {
+    $departments = [];
+  }
+  if (empty($departments)) {
+    // DB unreachable or table not migrated yet — fall back to the seeded set.
+    $departments = [
+      ['code' => 'BSEED', 'name' => 'Bachelor of Secondary Education'],
+      ['code' => 'BSIT', 'name' => 'Bachelor of Science in Information Technology'],
+      ['code' => 'BSHM', 'name' => 'Bachelor of Science in Hospitality Management'],
+    ];
+  }
+
+  $result = [];
+  foreach ($departments as $dept) {
+    $result[$dept['code']] = ['name' => $dept['name'], 'tracks' => []];
+  }
+
+  $knownCodes = array_keys($result);
+  foreach (inkwell_categories() as $catKey => $cat) {
+    $course = inkwell_normalize_lesson_course($cat['course'] ?? '');
+    if (!in_array($course, $knownCodes, true)) $course = '__OTHER__';
+    if (!isset($result[$course])) $result[$course] = ['name' => 'Other', 'tracks' => []];
+    $result[$course]['tracks'][$catKey] = $cat;
+  }
+
+  // Drop the "Other" bucket entirely when it ends up empty.
+  if (isset($result['__OTHER__']) && empty($result['__OTHER__']['tracks'])) {
+    unset($result['__OTHER__']);
+  }
+
+  return $result;
 }
 
 /** Return one category's data, or null. */
 function inkwell_category($cat) {
-  global $INKWELL_LESSONS;
-  return $INKWELL_LESSONS[$cat] ?? null;
+  $cats = inkwell_categories();
+  return $cats[$cat] ?? null;
 }
 
 /** Return one lesson, or null. */
