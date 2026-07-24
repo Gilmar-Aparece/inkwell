@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/data/lessons.php';
+require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/lesson_progress.php';
 
 $activeCat = $_GET['cat'] ?? '';
 $activeSlug = $_GET['slug'] ?? '';
@@ -16,6 +18,17 @@ if (!$lesson || !$category) {
 }
 
 list($prevSlug, $nextSlug) = inkwell_neighbors($activeCat, $activeSlug);
+
+$__lessonUser = inkwell_current_user();
+$__lessonLocked = inkwell_lesson_is_locked($activeCat, $activeSlug, $__lessonUser);
+
+if ($__lessonUser) {
+  inkwell_update_last_lesson($__lessonUser['id'], $activeCat, $activeSlug);
+  if (!$__lessonLocked) {
+    inkwell_record_lesson_view($__lessonUser['id'], $activeCat, $activeSlug);
+  }
+}
+
 $pageTitle = $lesson['title'];
 include __DIR__ . '/includes/header.php';
 ?>
@@ -30,7 +43,22 @@ include __DIR__ . '/includes/header.php';
       </div>
       <h1><?php echo htmlspecialchars($lesson['title']); ?></h1>
       <p class="summary"><?php echo htmlspecialchars($lesson['summary']); ?></p>
-      <div class="body"><?php echo $lesson['body']; /* trusted local content */ ?></div>
+      <?php if ($__lessonLocked): ?>
+        <div class="body">
+          <p>This lesson is part of the full <?php echo htmlspecialchars($category['label']); ?> track, unlocked with <strong>Pro Learner</strong>.</p>
+        </div>
+        <div class="exam-result" style="margin-top:8px;">
+          🔒 The first <?php echo inkwell_free_lessons_per_track(); ?> lessons in every track are free — this one and the rest need a Pro plan.
+          <?php if ($__lessonUser): ?>
+            <a href="/my-billing.php">Upgrade to Pro Learner →</a>
+          <?php else: ?>
+            <a href="/login.php?next=<?php echo urlencode($_SERVER['REQUEST_URI'] ?? '/lesson.php'); ?>">Log in</a>, then
+            <a href="/my-billing.php">upgrade to Pro Learner →</a>
+          <?php endif; ?>
+        </div>
+      <?php else: ?>
+        <div class="body"><?php echo $lesson['body']; /* trusted local content */ ?></div>
+      <?php endif; ?>
 
       <div class="lesson-nav">
         <?php if ($prevSlug): ?>
@@ -47,7 +75,14 @@ include __DIR__ . '/includes/header.php';
     <div class="binding"></div>
 
     <?php $runnable = $category['runnable'] ?? true; ?>
-    <?php if ($runnable): ?>
+    <?php if ($__lessonLocked): ?>
+      <div class="editor-col static" id="inkwellEditor">
+        <div class="static-note" style="padding:24px;">
+          The code editor for this lesson unlocks with Pro Learner.
+          <a href="/my-billing.php">See plans →</a>
+        </div>
+      </div>
+    <?php elseif ($runnable): ?>
       <div class="editor-col" id="inkwellEditor">
         <div class="editor-tabs" data-role="tabs"></div>
         <button class="run-btn" data-role="run" type="button">▶ Run</button>
@@ -77,10 +112,12 @@ include __DIR__ . '/includes/header.php';
   </div>
 </div>
 
-<script src="/assets/js/editor.js"></script>
+<script src="/assets/js/editor.js?v=<?php echo filemtime(__DIR__ . '/assets/js/editor.js'); ?>"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    <?php if ($runnable): ?>
+    <?php if ($__lessonLocked): ?>
+      // Locked lesson — no editor to initialize.
+    <?php elseif ($runnable): ?>
       InkwellEditor.create({
         rootEl: document.getElementById('inkwellEditor'),
         initialHtml: <?php echo json_encode($lesson['html']); ?>,
